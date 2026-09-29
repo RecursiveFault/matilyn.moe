@@ -2,7 +2,7 @@
    matilyn.moe — 2000s layout, scaled from a 1024px base
    --------------------------------------------------------------------------
    calc(N * var(--px)) means "N pixels on a 1024px-era screen". Sizes stay at
-   1x up to 1080px wide, then grow with the viewport up to 1.25x (1350px
+   1x up to 1080px wide, then grow with the viewport up to 1.1x (1188px
    wide). Borders stay at a real 1px so they stay crisp.
    ========================================================================== */
 
@@ -26,8 +26,8 @@
 }
 
 html {
-  /* 12px up to 1080 wide, proportional above that, capped at 15px = 1.25x (1350 wide) */
-  font-size: clamp(12px, calc(12 / 1080 * 100vw), 15px);
+  /* 12px up to 1080 wide, proportional above that, capped at 13.2px = 1.1x (1188 wide) */
+  font-size: clamp(12px, calc(12 / 1080 * 100vw), 13.2px);
 }
 
 body {
