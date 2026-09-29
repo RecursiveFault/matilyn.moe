@@ -51,6 +51,21 @@
   </main>
 
   <aside class="col-right">
+    {%- set nowSteam = media.steam.recent.slice(0, 3) if media.steam.ok else [] %}
+    {%- set nowAni = media.anilist.watching.slice(0, 3) if media.anilist.ok else [] %}
+    {%- if nowSteam.length or nowAni.length %}
+    {% call box("■ Now") %}
+      <ul class="now">
+        {%- for g in nowSteam %}
+        <li><span class="tag">PLAY</span> <a href="{{ g.url }}">{{ g.name }}</a> <span class="small">{{ g.hours2wk }}h/2wk</span></li>
+        {%- endfor %}
+        {%- for e in nowAni %}
+        <li><span class="tag tag-ani">WATCH</span> <a href="{{ e.url }}">{{ e.title }}</a> <span class="small">ep {{ e.progress }}{% if e.total %}/{{ e.total }}{% endif %}</span></li>
+        {%- endfor %}
+      </ul>
+      <p class="more"><a href="/media/">» media log</a></p>
+    {% endcall %}
+    {%- endif %}
     {% call box("■ 最新情報 / Updates") %}
       <ul class="updates">
         {%- for u in updates %}

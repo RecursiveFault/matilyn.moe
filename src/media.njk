@@ -1,0 +1,92 @@
+---
+layout: layouts/base.njk
+title: Media
+permalink: /media/
+---
+{% from "macros/box.njk" import box %}
+{% call box("■ Media log") %}
+<p>What I'm playing, watching and reading. Steam and AniList update automatically every few hours; Backloggd is updated by hand.</p>
+<p class="small">※ Last synced {{ media.synced | ymd }} ｜
+  {% if media.steam.ok %}<a href="{{ media.steam.profile }}">Steam</a>{% else %}Steam{% endif %} ・
+  {% if media.anilist.ok %}<a href="{{ media.anilist.profile }}">AniList</a>{% else %}AniList{% endif %} ・
+  {% if media.backloggd.profile %}<a href="{{ media.backloggd.profile }}">Backloggd</a>{% else %}Backloggd{% endif %}</p>
+{% endcall %}
+
+{% call box("■ Steam: recently played (2 weeks)") %}
+{% if media.steam.ok and media.steam.recent.length %}
+<table class="grid">
+  <thead><tr><th>Game</th><th>2 wk</th><th>Total</th></tr></thead>
+  <tbody>
+  {%- for g in media.steam.recent %}
+    <tr>
+      <td>{% if g.icon %}<img class="icon" src="{{ g.icon }}" alt="" width="16" height="16" loading="lazy"> {% endif %}<a href="{{ g.url }}">{{ g.name }}</a></td>
+      <td class="num">{{ g.hours2wk }}h</td>
+      <td class="num">{{ g.hoursTotal }}h</td>
+    </tr>
+  {%- endfor %}
+  </tbody>
+</table>
+{% elif media.steam.ok %}<p class="small">Nothing played in the last two weeks.</p>
+{% else %}<p class="small">※ Steam unavailable ({{ media.steam.reason }}).</p>{% endif %}
+{% endcall %}
+
+{% macro aniTable(list, empty) %}
+{% if list.length %}
+<table class="grid">
+  <thead><tr><th>Title</th><th>Format</th><th>Progress</th><th>Score</th></tr></thead>
+  <tbody>
+  {%- for e in list %}
+    <tr>
+      <td><a href="{{ e.url }}">{{ e.title }}</a></td>
+      <td class="nowrap">{{ e.format }}</td>
+      <td class="num">{{ e.unit }} {{ e.progress }}{% if e.total %}/{{ e.total }}{% endif %}</td>
+      <td class="num">{{ e.score or "—" }}</td>
+    </tr>
+  {%- endfor %}
+  </tbody>
+</table>
+{% else %}<p class="small">{{ empty }}</p>{% endif %}
+{% endmacro %}
+
+{% if media.anilist.ok %}
+{% call box("■ AniList: watching") %}{{ aniTable(media.anilist.watching, "Not watching anything right now.") }}{% endcall %}
+{% call box("■ AniList: reading") %}{{ aniTable(media.anilist.reading, "Not reading anything right now.") }}{% endcall %}
+{% call box("■ AniList: recently completed") %}
+{% if media.anilist.completed.length %}
+<table class="grid">
+  <thead><tr><th>Title</th><th>Type</th><th>Finished</th><th>Score</th></tr></thead>
+  <tbody>
+  {%- for e in media.anilist.completed %}
+    <tr>
+      <td><a href="{{ e.url }}">{{ e.title }}</a></td>
+      <td>{{ e.type }}</td>
+      <td class="nowrap">{{ e.completed | ymd if e.completed else "—" }}</td>
+      <td class="num">{{ e.score or "—" }}</td>
+    </tr>
+  {%- endfor %}
+  </tbody>
+</table>
+{% else %}<p class="small">Nothing completed yet.</p>{% endif %}
+{% endcall %}
+{% else %}
+{% call box("■ AniList") %}<p class="small">※ AniList unavailable ({{ media.anilist.reason }}).</p>{% endcall %}
+{% endif %}
+
+{% call box("■ Backloggd") %}
+{% if media.backloggd.games.length %}
+<table class="grid">
+  <thead><tr><th>Game</th><th>Status</th><th>Platform</th><th>Rating</th><th>Date</th></tr></thead>
+  <tbody>
+  {%- for g in media.backloggd.games %}
+    <tr>
+      <td><b>{{ g.title }}</b>{% if g.note %}<br><span class="small">{{ g.note }}</span>{% endif %}</td>
+      <td><span class="status status-{{ g.status }}">{{ g.status }}</span></td>
+      <td>{{ g.platform }}</td>
+      <td class="nowrap">{% if g.rating != null %}{{ g.rating | stars }}{% else %}—{% endif %}</td>
+      <td class="nowrap">{{ g.date | ymd }}</td>
+    </tr>
+  {%- endfor %}
+  </tbody>
+</table>
+{% else %}<p class="small">No games logged.</p>{% endif %}
+{% endcall %}

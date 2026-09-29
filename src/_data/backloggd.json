@@ -1,0 +1,6 @@
+{
+  "_note": "Backloggd has no API and blocks automated requests, so edit this by hand. status: playing | backlog | finished | shelved. rating: 0-5 in halves, or null.",
+  "games": [
+    { "title": "Example Game", "status": "playing", "platform": "PC", "rating": null, "date": "2026-09-29", "note": "Replace these with your own." }
+  ]
+}

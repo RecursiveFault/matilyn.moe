@@ -16,6 +16,12 @@ export default function (eleventyConfig) {
     return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
   });
 
+  // Backloggd-style rating, 0–5 in halves: 3.5 -> ★★★½☆
+  eleventyConfig.addFilter("stars", (r) => {
+    const full = Math.floor(r), half = r % 1 >= 0.5;
+    return "★".repeat(full) + (half ? "½" : "") + "☆".repeat(5 - full - (half ? 1 : 0));
+  });
+
   return {
     dir: { input: "src", output: "_site" },
     pathPrefix: process.env.PATH_PREFIX || "/",

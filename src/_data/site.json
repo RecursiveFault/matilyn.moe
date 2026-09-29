@@ -4,8 +4,26 @@
   "author": "matilyn",
   "counter": "0001337",
   "nav": [
-    { "label": "Home", "url": "/" },
-    { "label": "Projects", "url": "/projects/" },
-    { "label": "About", "url": "/about/" }
-  ]
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "Projects",
+      "url": "/projects/"
+    },
+    {
+      "label": "Media",
+      "url": "/media/"
+    },
+    {
+      "label": "About",
+      "url": "/about/"
+    }
+  ],
+  "accounts": {
+    "anilist": "",
+    "steamId": "",
+    "backloggd": ""
+  }
 }

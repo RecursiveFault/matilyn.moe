@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"  # rebuild every 6 hours to pull fresh Steam/AniList data
 
 permissions:
   contents: read
@@ -29,6 +31,7 @@ jobs:
       # base_path is "" on a custom domain and "/<repo>" on username.github.io
       - run: npm run build
         env:
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           PATH_PREFIX: ${{ steps.pages.outputs.base_path }}/
       - uses: actions/upload-pages-artifact@v3
         with:
