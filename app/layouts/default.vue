@@ -52,7 +52,7 @@ const isActive = (url: string) => trim(route.path) === trim(url);
       </NuxtLink>
     </nav>
 
-    <aside class="area-left flex flex-col gap-1.5">
+    <aside class="area-left flex flex-col gap-1.5 font-mono">
       <RetroBox title="■ Menu">
         <ul class="dotted-list">
           <li v-for="item in site.nav" :key="item.url">
@@ -74,7 +74,7 @@ const isActive = (url: string) => trim(route.path) === trim(url);
       <slot />
     </main>
 
-    <aside class="area-right flex flex-col gap-1.5">
+    <aside class="area-right flex flex-col gap-1.5 font-mono">
       <NowBox />
       <RetroBox title="■ 最新情報 / Updates">
         <ul class="dotted-list">

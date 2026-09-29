@@ -20,11 +20,21 @@ export default defineConfig({
     presetWebFonts({
       provider: "google",
       fonts: {
-        // font-body: Inconsolata, then Japanese-capable fallbacks
-        // Inconsolata has no Japanese, so kana/kanji fall through to a system
-        // Japanese font. Downloading Noto Sans JP instead added ~250
+        // Neither Latin font has Japanese, so kana/kanji fall through to a
+        // system Japanese font. Downloading Noto Sans JP instead added ~250
         // @font-face blocks (200+ KB) to the CSS.
+
+        // font-body: main text. Condensed sans, close to Arial Narrow.
         body: [
+          { name: "Roboto Condensed", weights: ["400", "700"] },
+          { name: "Arial Narrow", provider: "none" },
+          { name: "MS PGothic", provider: "none" },
+          { name: "Hiragino Sans", provider: "none" },
+          { name: "Noto Sans CJK JP", provider: "none" },
+          { name: "sans-serif", provider: "none" },
+        ],
+        // font-mono: the sidebars (menu, profile, updates, links...)
+        mono: [
           { name: "Inconsolata", weights: ["400", "700"] },
           { name: "MS Gothic", provider: "none" },
           { name: "Hiragino Sans", provider: "none" },
