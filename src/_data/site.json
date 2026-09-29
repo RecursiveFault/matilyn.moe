@@ -1,0 +1,11 @@
+{
+  "title": "matilyn.moe",
+  "tagline": "personal projects, notes & links — since 2026",
+  "author": "matilyn",
+  "counter": "0001337",
+  "nav": [
+    { "label": "Home", "url": "/" },
+    { "label": "Projects", "url": "/projects/" },
+    { "label": "About", "url": "/about/" }
+  ]
+}

@@ -1,0 +1,34 @@
+---
+layout: layouts/base.njk
+title: Projects
+permalink: /projects/
+---
+{% from "macros/box.njk" import box %}
+{% call box("■ Projects index") %}
+<p>Everything I've built or am building, newest first. Each entry lists what it's made with and the problems that shaped it.</p>
+<ul class="toc">
+{%- for p in projects %}
+  <li>▶ <a href="#{{ p.name | slugify }}">{{ p.name }}</a> <span class="small">({{ p.category }})</span></li>
+{%- endfor %}
+</ul>
+{% endcall %}
+
+{% for p in projects %}
+<div id="{{ p.name | slugify }}">
+{% call box("▶ " + p.name) %}
+<dl class="kv">
+  <dt>Type</dt><dd>{{ p.category }}</dd>
+  <dt>Status</dt><dd><span class="status status-{{ p.status }}">{{ p.status }}</span></dd>
+  <dt>Started</dt><dd>{{ p.started | ymd }}</dd>
+  <dt>Updated</dt><dd>{{ p.updated | ymd }}</dd>
+  <dt>Made with</dt><dd>{{ p.tech }}</dd>
+</dl>
+<p class="lead">{{ p.desc }}</p>
+<ul class="details">
+{%- for d in p.details %}
+  <li>{{ d }}</li>
+{%- endfor %}
+</ul>
+{% endcall %}
+</div>
+{% endfor %}

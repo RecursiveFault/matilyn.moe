@@ -1,0 +1,9 @@
+[
+  { "group": "Tools", "items": [
+    { "label": "Eleventy", "url": "https://www.11ty.dev/" },
+    { "label": "Neocities", "url": "https://neocities.org/" }
+  ]},
+  { "group": "Reference", "items": [
+    { "label": "Wayback Machine", "url": "https://web.archive.org/" }
+  ]}
+]
