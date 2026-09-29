@@ -77,14 +77,14 @@ export default defineConfig({
         anilist: "#02a9ff",
       },
     },
-    // Relative to <body>'s size (12px on desktop). Comments give the px size there.
+    // Relative to <body>'s size (13px on desktop). Comments give the px size there.
     fontSize: {
-      "em-2xs": ["0.75em", "inherit"], // 9px: badges
-      "em-xs": ["0.8333em", "inherit"], // 10px: dates, small print
-      "em-sm": ["0.9167em", "inherit"], // 11px: notes, tagline
-      "em-base": ["1em", "inherit"], // 12px
-      "em-lg": ["1.5em", "inherit"], // 18px: counter
-      "em-title": ["2.3333em", "inherit"], // 28px: site title
+      "em-2xs": ["0.75em", "inherit"], // ~10px: badges
+      "em-xs": ["0.8333em", "inherit"], // ~11px: dates, small print
+      "em-sm": ["0.9167em", "inherit"], // ~12px: notes, tagline
+      "em-base": ["1em", "inherit"], // 13px
+      "em-lg": ["1.5em", "inherit"], // ~20px: counter
+      "em-title": ["2.3333em", "inherit"], // ~30px: site title
     },
   },
 
