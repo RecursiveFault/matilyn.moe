@@ -1,8 +1,0 @@
-{#- Usage: {% from "macros/box.njk" import box %}
-           {% call box("Title", "optional-class") %} ...content... {% endcall %} -#}
-{% macro box(title, cls="") %}
-<section class="box {{ cls }}">
-  <h3>{{ title | safe }}</h3>
-  <div class="box-body">{{ caller() }}</div>
-</section>
-{% endmacro %}

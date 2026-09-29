@@ -10,15 +10,15 @@
     },
     {
       "label": "Projects",
-      "url": "/projects/"
+      "url": "/projects"
     },
     {
       "label": "Media",
-      "url": "/media/"
+      "url": "/media"
     },
     {
       "label": "About",
-      "url": "/about/"
+      "url": "/about"
     }
   ],
   "accounts": {

@@ -1,3 +1,6 @@
 node_modules/
-_site/
-.cache/
+.nuxt/
+.output/
+.data/
+.env
+dist
