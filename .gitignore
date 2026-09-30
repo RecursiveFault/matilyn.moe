@@ -4,3 +4,7 @@ node_modules/
 .data/
 .env
 dist
+counter/count.json
+counter/count.json.tmp
+# Web fonts are downloaded at build time (uno.config.ts); don't commit them
+public/assets/fonts/

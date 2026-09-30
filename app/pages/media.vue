@@ -24,7 +24,7 @@ const { data: media } = await useMedia();
         <div v-if="media.steam.recent.length" class="overflow-x-auto">
           <table class="data-table">
             <thead>
-              <tr><th class="cell-head">Game</th><th class="cell-head">2 wk</th><th class="cell-head">Total</th></tr>
+              <tr><th class="cell-head">Game</th><th class="cell-head">Last played</th><th class="cell-head">2 wk</th><th class="cell-head">Total</th></tr>
             </thead>
             <tbody>
               <tr v-for="g in media.steam.recent" :key="g.url" class="even:bg-retro-alt">
@@ -35,6 +35,7 @@ const { data: media } = await useMedia();
                   >
                   <a :href="g.url">{{ g.name }}</a>
                 </td>
+                <td class="cell whitespace-nowrap">{{ g.lastPlayed ? ymd(g.lastPlayed) : "—" }}</td>
                 <td class="cell num">{{ g.hours2wk }}h</td>
                 <td class="cell num">{{ g.hoursTotal }}h</td>
               </tr>

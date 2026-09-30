@@ -7,6 +7,8 @@ const route = useRoute();
 // Set once while the page is prerendered, then shipped in the payload
 const built = useState("built", () => new Date().toISOString());
 
+const { display: visits } = useVisitCounter();
+
 const trim = (p: string) => p.replace(/\/$/, "");
 const isActive = (url: string) => trim(route.path) === trim(url);
 </script>
@@ -63,8 +65,8 @@ const isActive = (url: string) => trim(route.path) === trim(url);
       <RetroBox title="■ Profile">
         <p class="mb-1.5"><b>{{ site.author }}</b></p>
         <dl class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
-          <dt class="muted">Printer</dt><dd>Prusa MK4IS</dd>
-          <dt class="muted">Likes</dt><dd>minis, PETG, dense websites</dd>
+          <dt class="muted">Printer</dt><dd>prusa MK4IS</dd>
+          <dt class="muted">Likes</dt><dd>honduran coffee, potato soup, my wife, photography, hiking, cooking, miniature games</dd>
         </dl>
       </RetroBox>
     </aside>
@@ -93,14 +95,14 @@ const isActive = (url: string) => trim(route.path) === trim(url);
         </template>
       </RetroBox>
       <RetroBox title="■ Counter">
-        <p class="font-display text-em-lg tracking-[0.1875rem] text-center bg-[#111] text-[#6f6] py-0.5">{{ site.counter }}</p>
-        <p class="small mt-1">※ decorative, not a real counter</p>
+        <p class="font-display text-em-lg tracking-[0.1875rem] text-center bg-[#111] text-[#6f6] py-0.5">{{ visits }}</p>
+        <p class="small mt-1">※ visits, counted once per session</p>
       </RetroBox>
     </aside>
 
     <footer class="area-foot text-center text-em-xs muted border-t border-retro-line pt-1.5">
-      Copyright &copy; {{ built.slice(0, 4) }} {{ site.author }}. All rights reserved.
-      ｜ Best viewed at 1024×768 (or anything, really).
+      Copyleft {{ built.slice(0, 4) }} {{ site.author }}. Some rights reserved.
+      ｜ Best viewed on CRT.
     </footer>
   </div>
 </template>

@@ -22,7 +22,7 @@ import projects from "~~/data/projects.json";
         </thead>
         <tbody>
           <tr v-for="p in projects" :key="p.name" class="even:bg-retro-alt">
-            <td class="cell"><b>{{ p.name }}</b><br><span class="small">{{ p.desc }}</span></td>
+            <td class="cell"><b>{{ p.name }}</b><br><span class="small"><RichText :text="p.desc" /></span></td>
             <td class="cell">{{ p.category }}</td>
             <td class="cell"><StatusBadge :status="p.status" /></td>
             <td class="cell whitespace-nowrap">{{ ymd(p.updated) }}</td>
@@ -36,8 +36,7 @@ import projects from "~~/data/projects.json";
   <div class="grid gap-1.5 md:grid-cols-2">
     <RetroBox title="■ About this site">
       <p>
-        Nuxt, Vue and UnoCSS, generated to static HTML. No tracking.
-        The 1px borders and dense text are on purpose.
+        Nuxt, Vue and UnoCSS, generated to static HTML.
       </p>
     </RetroBox>
     <RetroBox title="■ Currently">

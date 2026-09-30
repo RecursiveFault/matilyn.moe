@@ -25,11 +25,11 @@ useHead({ title: "Projects" });
       <dt class="muted">Updated</dt><dd>{{ ymd(p.updated) }}</dd>
       <dt class="muted">Made with</dt><dd>{{ p.tech }}</dd>
     </dl>
-    <p class="mt-1.5 font-bold">{{ p.desc }}</p>
+    <p class="mt-1.5 font-bold"><RichText :text="p.desc" /></p>
     <ul class="dotted-list">
       <!-- -indent + padding makes wrapped lines hang under the text, not the ※ -->
       <li v-for="(d, i) in p.details" :key="i" class="pl-3 -indent-3">
-        <span class="text-retro-accent">※ </span>{{ d }}
+        <span class="text-retro-accent">※ </span><RichText :text="d" />
       </li>
     </ul>
   </RetroBox>

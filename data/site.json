@@ -2,7 +2,11 @@
   "title": "matilyn.moe",
   "tagline": "personal projects, notes & links — since 2026",
   "author": "matilyn",
-  "counter": "0001337",
+  "counter": {
+    "_note": "Visit counter service. hit adds one and returns {\"value\": n}; get only reads it. Point both at your own server when you self-host.",
+    "hit": "https://abacus.jasoncameron.dev/hit/matilyn.moe/visits",
+    "get": "https://abacus.jasoncameron.dev/get/matilyn.moe/visits"
+  },
   "nav": [
     {
       "label": "Home",
@@ -22,8 +26,8 @@
     }
   ],
   "accounts": {
-    "anilist": "",
-    "steamId": "",
-    "backloggd": ""
+    "anilist": "RecursiveFault",
+    "steamId": "76561198044914313",
+    "backloggd": "Matilyn"
   }
 }

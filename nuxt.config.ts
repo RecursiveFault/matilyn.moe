@@ -21,4 +21,15 @@ export default defineNuxtConfig({
   nitro: {
     prerender: { crawlLinks: true, routes: ["/"] },
   },
+
+  hooks: {
+    // UnoCSS downloads the web fonts into public/assets/fonts partway through
+    // the build (see uno.config.ts), after public/ has already been copied to
+    // the output. On a fresh checkout (CI) they'd be missing, so copy them in.
+    async "nitro:build:public-assets"(nitro) {
+      const { cp } = await import("node:fs/promises");
+      await cp("public/assets/fonts", `${nitro.options.output.publicDir}/assets/fonts`, { recursive: true })
+        .catch(() => {}); // no fonts folder: nothing to copy
+    },
+  },
 });

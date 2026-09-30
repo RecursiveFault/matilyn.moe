@@ -1,46 +1,56 @@
 [
   {
-    "name": "Solvent drip tray",
-    "category": "3D print",
-    "status": "active",
-    "started": "2026-09-17",
-    "updated": "2026-09-17",
-    "tech": "ShapeItUp / replicad (TypeScript), PrusaSlicer, Prusament PETG, Prusa MK4IS",
-    "desc": "Magnet-mounted PETG drip tray for oil-washing miniatures, built around a 6in steel cake pan.",
-    "details": [
-      "Five magnets in the underside stick the tray to a steel bench; six more in the floor hold a steel pan that drops inside. Minis dry on the pan and the walls catch whatever runs off.",
-      "The front wall is cut down to an 8mm lip so a hand can reach in to paint without lifting anything out.",
-      "The pan has to be magnetic, which rules out aluminium, foil and most 18/10 \"stainless\" bakeware. Settled on a TeamFar 6in square pan in 18/0 stainless: 158.75mm outside, but the flat bottom is only 139.7mm, so the floor magnets have to sit inside that.",
-      "Every wall is a whole multiple of the 0.45mm extrusion width and every floor is 0.2 + n × 0.15mm, so the slicer never falls back to gap fill (which is where a 100%-infill part still leaks solvent).",
-      "Rebuilt as a parametric model after the first version, a PrusaSlicer primitive mashup, came out with floating walls and needed supports."
-    ]
-  },
-  {
-    "name": "StreamStartQuality",
-    "category": "Discord plugin",
-    "status": "paused",
-    "started": "2026-06-03",
-    "updated": "2026-06-03",
-    "tech": "TypeScript, Vencord plugin API, Discord's internal Flux dispatcher",
-    "desc": "Makes Discord screenshares start at full quality instead of slowly ramping up from a blurry first few seconds.",
-    "details": [
-      "Discord's adaptive bitrate starts a new stream near zero and climbs, so viewers see mush for the first stretch of every screenshare.",
-      "The plugin listens for STREAM_CREATE on your own streams, waits a configurable delay (default 1500ms), then re-applies the current quality through Discord's own updateVideoQuality action. That triggers a fresh WebRTC offer at the full target bitrate.",
-      "Discord's streaming modules are lazy-loaded and only appear in the webpack cache after you've streamed once in a session, which made finding the right internal function the fiddly part."
-    ]
-  },
-  {
     "name": "matilyn.moe",
     "category": "Web",
     "status": "active",
     "started": "2026-09-29",
-    "updated": "2026-09-29",
-    "tech": "Eleventy 3, Nunjucks, hand-written CSS",
-    "desc": "This site. A 2000s-portal layout designed at 1024px and scaled proportionally for modern screens.",
+    "last updated": "2026-09-29",
+    "tech": "Nuxt 4, Vue 3, UnoCSS, GitHub Pages",
+    "desc": "This site. A 2000s-portal layout built with Vue components and utility CSS, generated to static HTML.",
     "details": [
-      "Every size is written in \"1024-era pixels\" and scales with the window up to 2×, while borders stay a real 1px so they stay crisp.",
-      "Below 1024px it stops scaling and reflows instead: two columns on tablets, one on phones, with swipeable nav tabs.",
-      "Project lists, updates and links are JSON data files, so adding an entry updates every page that shows it."
+      "Personal site built in Nuxt and Vue so the layout could be split into reusable components like the titled box used throughout.",
+      "Styled with UnoCSS utility classes. The retro palette, fonts and repeated patterns (boxes, tables, dotted lists) live in one config file as theme colors and shortcuts.",
+      "Text sizes are in em off a single body size, so the whole site's type can be resized from one place. The layout is three columns at 1024px and up, two on tablets, and one on phones.",
+      "Steam and AniList activity is fetched once at build time and baked into the pages, so the static site never calls those APIs or exposes the Steam key.",
+      "Projects, updates and links are JSON data files, so adding an entry updates every page that shows it."
+    ]
+  },
+  {
+    "name": "SaGa Frontier CRT setup",
+    "category": "Linux gaming",
+    "status": "done",
+    "started": "2026-09-18",
+    "tech": "gamescope, vkBasalt, ReShade, Steam Input",
+    "desc": "SaGa Frontier Remastered at an integer-scaled 480p with a CRT shader on top, and working controller input.",
+    "details": [
+      "Nested gamescope on Wayland breaks controller input. It only works with the SDL backend using \"SDL_VIDEODRIVER=x11\"",
+      "vkBasalt hooks gamescope's own output, not the game, so the CRT shader runs on the upscaled 1440p frame while the game renders at 852×480 with nearest-neighbour integer scaling.",
+      "The CRT-Lottes shader (from RSRetroArch) is edited for the emulated resolution, with the screen curvature turned off and a texture-coordinate fix.",
+      "Launch: `ENABLE_VKBASALT=1 SDL_VIDEODRIVER=x11 gamescope --backend sdl -w 852 -h 480 -W 2560 -H 1440 -S integer -F nearest -f -- env ENABLE_VKBASALT=0 %command%`"
+    ]
+  },
+  {
+    "name": "First Person Mech",
+    "category": "Game",
+    "status": "active",
+    "started": "2026-09-04",
+    "tech": "Godot 4.7, GDScript",
+    "desc": "A first-person mech game: take contracts from a garage hub, fit weapons, and fight with lock-on combat.",
+    "details": [
+      "WIP: a player controller with a weapon manager and lock-on, hitbox/hurtbox combat, and enemies driven by their own AI script.",
+      "Weapons, attacks and contracts are data resources, so new ones are data files rather than new code."
+    ]
+  },
+  {
+    "name": "PrusaSlicer miniature tuning",
+    "category": "3D print",
+    "status": "active",
+    "started": "2026-08-08",
+    "tech": "PrusaSlicer 2.9 (Flatpak), Prusa MK4IS, 0.25mm nozzle, Prusament PLA",
+    "desc": "Print and filament presets for tabletop miniatures on a 0.25mm nozzle.",
+    "details": [
+      "Two 0.25 nozzle print presets: 0.07mm DETAIL for everyday printing and 0.0625mm ULTRADETAIL.",
+      "Supports are paint-on only by default. Minis that arrive tilted 45° and floating get \"Everywhere\" supports per project instead."
     ]
   }
 ]

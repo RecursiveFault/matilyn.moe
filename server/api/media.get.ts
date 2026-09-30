@@ -47,6 +47,7 @@ export interface SteamGame {
   icon: string | null;
   hours2wk: number;
   hoursTotal: number;
+  lastPlayed: string | null; // ISO timestamp
 }
 
 type Unavailable = { ok: false; reason: string };
@@ -67,13 +68,24 @@ interface AniListRaw {
 
 const pad = (n: number | null) => String(n || 1).padStart(2, "0");
 
+// API URLs end up in <a href>. Vue escapes text but not link targets, so only
+// pass through real https links; anything else (say, javascript:) gets the
+// fallback instead.
+function safeUrl(url: unknown, fallback: string): string {
+  try {
+    return new URL(String(url)).protocol === "https:" ? String(url) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function toEntry(e: AniListRaw): AniEntry {
   const m = e.media;
   const anime = m.type === "ANIME";
   const c = e.completedAt;
   return {
     title: m.title.userPreferred,
-    url: m.siteUrl,
+    url: safeUrl(m.siteUrl, "https://anilist.co/"),
     type: anime ? "Anime" : "Manga",
     format: (m.format || "").replace("_", " "),
     progress: e.progress,
@@ -109,29 +121,51 @@ async function steam(steamId: string, key: string) {
   if (!steamId) return { ok: false, reason: "not configured" } as Unavailable;
   if (!key) return { ok: false, reason: "no Steam API key" } as Unavailable;
   try {
-    const res = await $fetch<{ response: { games?: any[] } }>(
-      "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/",
-      { query: { key, steamid: steamId, count: 10, format: "json" } },
+    const api = "https://api.steampowered.com/IPlayerService";
+    // Recently played is sorted by hours in the last two weeks, and has no
+    // last-played time. Owned games does, so fetch both and sort by that.
+    // Owned games is only for sorting: if it fails, keep Steam's order.
+    const [res, owned] = await Promise.all([
+      $fetch<{ response: { games?: any[] } }>(`${api}/GetRecentlyPlayedGames/v1/`, {
+        query: { key, steamid: steamId, count: 10, format: "json" },
+      }),
+      $fetch<{ response: { games?: any[] } }>(`${api}/GetOwnedGames/v1/`, {
+        query: { key, steamid: steamId, include_played_free_games: 1, format: "json" },
+      }).catch(() => null),
+    ]);
+    const lastPlayed = new Map<number, number>(
+      (owned?.response.games || []).map((g) => [g.appid, g.rtime_last_played]),
     );
     const hours = (min: number) => Math.round((min / 60) * 10) / 10;
+    // Skip games with under an hour in the last two weeks (a quick launch or
+    // an update check), then put the most recently played first
+    const games = (res.response.games || []).filter((g) => (g.playtime_2weeks || 0) >= 60).sort(
+      (a, b) => (lastPlayed.get(b.appid) || 0) - (lastPlayed.get(a.appid) || 0),
+    );
     return {
       ok: true as const,
       profile: `https://steamcommunity.com/profiles/${steamId}/`,
-      recent: (res.response.games || []).map(
-        (g): SteamGame => ({
+      recent: games.map((g): SteamGame => {
+        const last = lastPlayed.get(g.appid);
+        const appid = Number(g.appid); // goes into URLs, so make sure it's just a number
+        return {
           name: g.name,
-          url: `https://store.steampowered.com/app/${g.appid}/`,
-          icon: g.img_icon_url
-            ? `https://media.steampowered.com/steamcommunity/public/images/apps/${g.appid}/${g.img_icon_url}.jpg`
+          url: `https://store.steampowered.com/app/${appid}/`,
+          // The icon name is a hex hash; anything else is skipped
+          icon: /^[0-9a-f]+$/i.test(g.img_icon_url || "")
+            ? `https://media.steampowered.com/steamcommunity/public/images/apps/${appid}/${g.img_icon_url}.jpg`
             : null,
           hours2wk: hours(g.playtime_2weeks || 0),
           hoursTotal: hours(g.playtime_forever || 0),
-        }),
-      ),
+          lastPlayed: last ? new Date(last * 1000).toISOString() : null,
+        };
+      }),
     };
-  } catch {
-    // Deliberately not logging the error: its message contains the URL with the key.
-    console.warn("[media] Steam fetch failed (check the API key, the SteamID, and that game details are public)");
+  } catch (err) {
+    // The message contains the request URL, key included, so blank the key out
+    const msg = String((err as Error).message).replaceAll(key, "***");
+    console.warn(`[media] Steam fetch failed: ${msg}`);
+    console.warn("[media] (check the API key, the SteamID, and that game details are public)");
     return { ok: false, reason: "fetch failed" } as Unavailable;
   }
 }
@@ -139,6 +173,8 @@ async function steam(steamId: string, key: string) {
 // Cached for an hour so every prerendered page (and dev reloads) share one
 // fetch. Nitro keeps this cache in .nuxt/cache between local builds, so the
 // key includes the accounts: changing one in site.json refetches right away.
+// It also notes whether a Steam key is set (never the key itself), so adding
+// one doesn't keep serving the cached "no Steam API key" result.
 export default defineCachedEventHandler(
   async (event) => {
     const { steamApiKey } = useRuntimeConfig(event);
@@ -157,6 +193,7 @@ export default defineCachedEventHandler(
   {
     maxAge: 60 * 60,
     name: "media",
-    getKey: () => Object.values(site.accounts).join("|"),
+    getKey: (event) =>
+      [...Object.values(site.accounts), useRuntimeConfig(event).steamApiKey ? "key" : "nokey"].join("|"),
   },
 );

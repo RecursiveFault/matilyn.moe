@@ -5,6 +5,7 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from "unocss";
+import { createLocalFontProcessor } from "@unocss/preset-web-fonts/local";
 
 // Font sizes are all em. <body> sets the base text size relative to the
 // browser default (app.vue), and everything inside is relative to <body>.
@@ -19,6 +20,15 @@ export default defineConfig({
     presetWind3(),
     presetWebFonts({
       provider: "google",
+      // Download the font files at build time and serve them from this site,
+      // so visitors never contact Google. Files already in public/assets/fonts
+      // are reused, not downloaded again (that folder is gitignored, so CI
+      // downloads a fresh copy on each build).
+      // The URL includes the base path, for when the site lives under /<repo>/
+      // on GitHub Pages instead of its own domain.
+      processors: createLocalFontProcessor({
+        fontServeBaseUrl: `${(process.env.NUXT_APP_BASE_URL || "/").replace(/\/$/, "")}/assets/fonts`,
+      }),
       fonts: {
         // Neither Latin font has Japanese, so kana/kanji fall through to a
         // system Japanese font. Downloading Noto Sans JP instead added ~250
@@ -76,15 +86,24 @@ export default defineConfig({
         steam: "#3a6ea5",
         anilist: "#02a9ff",
       },
+      // Syntax colors for `inline code` (components/RichText.vue)
+      code: {
+        cmd: "#0b3d91", // command name
+        var: "#8b2f6b", // VAR in VAR=value
+        val: "#2d6a1f", // value in VAR=value
+        flag: "#a14a00", // -w, --backend
+        num: "#7a5c00", // numbers
+        ph: "#00707a", // %command%, $VAR
+      },
     },
-    // Relative to <body>'s size (13px on desktop). Comments give the px size there.
+    // Relative to <body>'s size (14px on tablet and desktop). Comments give the px size there.
     fontSize: {
-      "em-2xs": ["0.75em", "inherit"], // ~10px: badges
-      "em-xs": ["0.8333em", "inherit"], // ~11px: dates, small print
-      "em-sm": ["0.9167em", "inherit"], // ~12px: notes, tagline
-      "em-base": ["1em", "inherit"], // 13px
-      "em-lg": ["1.5em", "inherit"], // ~20px: counter
-      "em-title": ["2.3333em", "inherit"], // ~30px: site title
+      "em-2xs": ["0.75em", "inherit"], // ~10.5px: badges
+      "em-xs": ["0.8333em", "inherit"], // ~11.5px: dates, small print
+      "em-sm": ["0.9167em", "inherit"], // ~13px: notes, tagline
+      "em-base": ["1em", "inherit"], // 14px
+      "em-lg": ["1.5em", "inherit"], // 21px: counter
+      "em-title": ["2.3333em", "inherit"], // ~33px: site title
     },
   },
 
@@ -123,6 +142,11 @@ export default defineConfig({
     muted: "text-retro-muted",
     small: "text-em-xs text-retro-muted",
     badge: "inline-block px-0.75 text-em-2xs font-bold text-white",
+
+    // `inline code`. Long commands wrap between words; box-decoration-clone
+    // gives each wrapped line its own padding and border ends.
+    "code-inline":
+      "font-mono px-1 bg-retro-alt border border-retro-soft break-words [box-decoration-break:clone]",
   },
 
   // Global element styles that aren't worth a class on every tag. :where()
